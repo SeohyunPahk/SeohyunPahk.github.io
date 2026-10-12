@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="매번 LMS에 들어가지 않아도, 컴퓨터를 켤 때마다 바탕화면에서 과제 기한을 확인하는 Windows 위젯">
+<meta property="og:title" content="YHT (You Have Time)">
+<meta property="og:description" content="컴퓨터를 켤 때마다 바탕화면에서 LMS 할 일을 확인하세요.">
+<meta property="og:image" content="https://seohyunpahk.github.io/light.png">
+<meta property="og:url" content="https://seohyunpahk.github.io/">
+<link rel="icon" href="logo.png">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>YHT You Have Time</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;900&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* Layout: one calm column on the logo's sky blue; the widget screenshots are the only saturated objects,
+   set large and slightly overlapped like panes of glass. Time is always set in the mono face, as in the app. */
+:root{
+  --sky:#dbe8f8; --sky-deep:#b9d3f0; --paper:#fbfbf8; --ink:#1c2738; --slate:#55698a; --line:#c5d5ea;
+  --accent:#3f67b0; --on-accent:#ffffff; --go:#12a594; --wait:#c27a08;
+  --display:"Gothic A1","Pretendard","Malgun Gothic",sans-serif;
+  --body:"IBM Plex Sans KR","Pretendard","Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --sky:#131a27; --sky-deep:#1b2639; --paper:#1d2636; --ink:#eef2f8; --slate:#9fb0cb; --line:#2f3d55;
+  --accent:#9dbcf2; --on-accent:#10192a; --go:#3dd6c0; --wait:#ffb84d; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --sky:#131a27; --sky-deep:#1b2639; --paper:#1d2636; --ink:#eef2f8; --slate:#9fb0cb; --line:#2f3d55;
+  --accent:#9dbcf2; --on-accent:#10192a; --go:#3dd6c0; --wait:#ffb84d; color-scheme:dark }
+
+body{background:var(--sky);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin-inline:auto;padding-inline:20px;padding-block:28px 56px;display:flex;flex-direction:column;gap:88px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-0.02em}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+.bar{display:flex;align-items:center;gap:12px}
+.bar img{width:40px;height:40px}
+.bar strong{font-family:var(--display);font-weight:900;font-size:20px}
+.bar span{color:var(--slate);font-size:14px}
+.bar .tag{margin-left:auto;font-size:13px;color:var(--slate);border:1px solid var(--line);padding:4px 10px;border-radius:999px;white-space:nowrap}
+
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}
+.hero h1{font-weight:900;font-size:clamp(40px,7vw,72px);line-height:1.04}
+.hero .lede{margin-top:20px;font-size:19px;font-weight:500;color:var(--ink);max-width:28em}
+.hero .sub{margin-top:10px;font-size:15.5px;color:var(--slate);max-width:32em}
+.clock{margin-top:26px;font-family:var(--mono);font-size:15px;color:var(--accent);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.clock b{font-weight:500;font-size:22px;color:var(--ink)}
+.cta{margin-top:28px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.get{display:inline-block;text-decoration:none;font:600 17px var(--body);background:var(--accent);color:var(--on-accent);border:0;border-radius:14px;padding:15px 26px;cursor:pointer}
+.get:hover{filter:brightness(1.07)}
+button.get[disabled]{opacity:.55;cursor:default}
+.cta small{color:var(--slate);font-size:13.5px;line-height:1.5}
+#getNote{margin-top:12px;font-size:14px;color:var(--slate);min-height:1.7em}
+#getNote.bad{color:var(--wait)}
+
+.stack{position:relative;aspect-ratio:1/1.08;max-width:100%}
+.stack img{position:absolute;width:68%;border-radius:18px;box-shadow:0 24px 60px rgba(20,34,60,.28)}
+.stack img:first-child{left:0;top:0}
+.stack img:last-child{right:0;bottom:0}
+
+.feature{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:44px;align-items:center}
+.feature.flip .shot{order:2}
+.feature .shot img{display:block;width:100%;max-width:420px;margin-inline:auto;border-radius:18px;box-shadow:0 18px 44px rgba(20,34,60,.22)}
+.feature h2{font-weight:900;font-size:clamp(26px,3.6vw,36px);line-height:1.18}
+.feature p{margin-top:14px;color:var(--slate);max-width:32em}
+.feature ul{margin:16px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.feature li{padding-left:18px;position:relative}
+.feature li::before{content:"";position:absolute;left:0;top:.72em;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.go{color:var(--go);font-weight:600}.wait{color:var(--wait);font-weight:600}
+.mono{font-family:var(--mono);font-size:.95em}
+
+.themes h2,.steps h2,.notes h2{font-weight:900;font-size:clamp(26px,3.6vw,36px)}
+.themes>p,.steps>p{margin-top:10px;color:var(--slate);max-width:36em}
+.row{margin-top:26px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.row figure{margin:0}
+.row img{display:block;width:100%;border-radius:14px}
+.row figcaption{margin-top:8px;font-size:14px;color:var(--slate)}
+
+.steps ol{margin:26px 0 0;padding:0;list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.steps li{counter-increment:s;background:var(--paper);border-radius:16px;padding:20px 22px;min-width:0}
+.steps li::before{content:counter(s);font-family:var(--mono);color:var(--accent);font-size:15px}
+.steps h3{font-weight:700;font-size:19px;margin-top:4px}
+.steps li p{margin-top:6px;color:var(--slate);font-size:15px}
+.steps .dialog{margin-top:22px;display:flex;justify-content:center}
+.steps .dialog img{border-radius:10px;box-shadow:0 14px 36px rgba(20,34,60,.2);width:100%;max-width:400px}
+
+.notes dl{margin:22px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 40px}
+.notes dt{font-family:var(--display);font-weight:700;font-size:17px}
+.notes dd{margin:4px 0 0;color:var(--slate);font-size:15px;overflow-wrap:anywhere}
+.hash{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+
+footer{border-top:1px solid var(--line);padding-top:22px;color:var(--slate);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+
+@media (max-width:760px){
+  .wrap{gap:64px}
+  .hero,.feature{grid-template-columns:minmax(0,1fr)}
+  .feature.flip .shot{order:0}
+  .row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .steps ol,.notes dl{grid-template-columns:minmax(0,1fr)}
+  .bar span{display:none}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <img src="logo.png" alt="YHT 로고">
+    <strong>YHT</strong><span>You Have Time</span>
+    <div class="tag">Windows · v10.2</div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>마감까지,<br>아직 시간 있어.</h1>
+      <p class="lede">매번 LMS에 들어가서 확인했다가 잊어버리지 마세요. 컴퓨터를 켤 때마다 할 일이 바탕화면에서 먼저 기다립니다.</p>
+      <p class="sub">YHT는 한국기술교육대학교 LMS의 과제·퀴즈·강의 영상 기한을 바탕화면에 띄워 두는 유리 위젯입니다.</p>
+      <div class="clock" aria-live="off"><span>이번 주 일요일 23:59까지</span><b id="left">—</b></div>
+      <div class="cta">
+        <a class="get" href="YHT-v10.2.zip" download>YHT 10.2 내려받기</a>
+        <small>Windows 10 · 11<br>ZIP 0.3MB · 무료</small>
+      </div>
+
+    </div>
+    <div class="stack" aria-hidden="true">
+      <img src="hero-dark.png" alt="">
+      <img src="light.png" alt="">
+    </div>
+  </section>
+
+  <section class="feature">
+    <div class="shot"><img src="light.png" alt="라이트 글래스 스타일의 YHT 위젯. 과제, 강의 영상, 퀴즈와 직접 추가한 할 일이 기한순으로 나열되어 있다."></div>
+    <div>
+      <h2>LMS에 있는 할 일이 알아서 들어옵니다</h2>
+      <p>크롬에서 LMS에 로그인하면 이번 주 할 일이 위젯으로 전달됩니다. 위젯의 LMS 연동 버튼을 누르면 바로 갱신하고, LMS 홈을 열어 둔 동안에는 15분마다 다시 확인합니다.</p>
+      <ul>
+        <li>과제, 퀴즈, 강의 영상을 기한이 가까운 순서로 정렬</li>
+        <li>남은 시간을 <span class="mono">2 days · 8 hours 남음</span>처럼 바로 표시</li>
+        <li>항목을 누르면 크롬에서 해당 LMS 페이지 열기, 과제는 설명과 첨부 링크까지</li>
+        <li>수업과 상관없는 내 할 일도 ＋ 로 추가</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="feature flip">
+    <div class="shot"><img src="hero-dark.png" alt="다크 글래스 스타일의 YHT 위젯. 지금 볼 수 있는 강의 영상 카드는 청록빛, 아직 열리지 않은 퀴즈 카드는 주황빛이 가장자리에 감돈다."></div>
+    <div>
+      <h2>지금 할 수 있는 일은 빛으로 구분합니다</h2>
+      <p>카드 가장자리에 은은한 빛이 돕니다. 표를 읽지 않아도 무엇부터 손댈 수 있는지 보입니다.</p>
+      <ul>
+        <li><span class="go">진행 중</span> 지금 제출하거나 시청할 수 있는 활동</li>
+        <li><span class="wait">시작 전</span> 아직 열리지 않은 활동</li>
+        <li>마감이 지난 항목은 남은 시간이 붉게 바뀝니다</li>
+        <li>끝낸 일은 동그라미를 눌러 지우고, 5초 안에 다시 누르면 되돌립니다</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="feature">
+    <div class="shot"><img src="locked.png" alt="잠긴 상태의 YHT 위젯. 버튼들이 흐려지고 오른쪽 아래 자물쇠가 닫혀 있다."></div>
+    <div>
+      <h2>바탕화면에 붙어 있고, 방해하지 않습니다</h2>
+      <p>LMS는 들어가야 보이지만 바탕화면은 켜면 보입니다. YHT는 다른 창 위로 올라오지 않고 바탕화면에 머뭅니다. 평소에는 잠겨 있어서 실수로 눌리지 않고, 더블 클릭하거나 자물쇠를 누르면 열립니다.</p>
+      <ul>
+        <li>Windows를 켜면 함께 시작</li>
+        <li>위쪽을 끌어 옮기고 가장자리를 끌어 크기 조절</li>
+        <li>우클릭 한 번으로 메뉴와 모든 옵션</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="themes">
+    <h2>배경화면에 맞추는 유리</h2>
+    <p>뒤가 흐리게 비치는 리퀴드 글래스, 그대로 비치는 클리어 글래스, 불투명한 기본 스타일 중에서 고릅니다. 투명도는 0%부터 100%까지, 색상 테마는 여섯 가지입니다.</p>
+    <div class="row">
+      <figure><img src="theme-blue.png" alt="오션 블루 테마, 다크 글래스"><figcaption>오션 블루 · 다크</figcaption></figure>
+      <figure><img src="theme-rose.png" alt="로즈 테마, 라이트 글래스"><figcaption>로즈 · 라이트</figcaption></figure>
+      <figure><img src="style-clear.png" alt="체리 레드 테마, 블러 없는 클리어 글래스"><figcaption>체리 레드 · 클리어 글래스</figcaption></figure>
+      <figure><img src="style-basic.png" alt="라벤더 테마, 불투명한 기본 스타일"><figcaption>라벤더 · 기본 스타일</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="steps">
+    <h2>설치는 파일 하나, 연결은 한 번</h2>
+    <p>내려받은 ZIP에는 실행 파일 하나와 안내문만 들어 있습니다. LMS 연결에는 Google Chrome이 필요합니다.</p>
+    <ol>
+      <li><h3>YHT.exe 실행</h3><p>압축을 풀고 실행합니다. “Windows의 PC 보호” 창이 뜨면 추가 정보 → 실행을 누르세요.</p></li>
+      <li><h3>자동 실행 선택</h3><p>Windows를 켤 때 함께 시작할지 묻습니다. 예를 누르면 내려받은 파일은 지워도 됩니다.</p></li>
+      <li><h3>크롬에 확장 프로그램 넣기</h3><p>설정 창의 설치 시작을 누르면 크롬 페이지와 폴더가 함께 열립니다. 개발자 모드를 켜고 폴더를 끌어다 놓습니다.</p></li>
+      <li><h3>LMS 열고 가져오기</h3><p>크롬에서 LMS 열고 동기화를 누르고 로그인하면 끝입니다. 다음부터는 위젯의 LMS 연동 버튼만 누릅니다.</p></li>
+    </ol>
+    <div class="dialog"><img src="setup.png" alt="YHT의 LMS 연동 설정 창. 1번 크롬에 확장 프로그램 넣기와 2번 LMS 열고 가져오기 단계가 순서대로 보인다."></div>
+  </section>
+
+  <section class="notes">
+    <h2>내려받기 전에 알아둘 점</h2>
+    <dl>
+      <div><dt>학교 공식 프로그램이 아닙니다</dt><dd>학생 한 명이 만들어 쓰는 비공식 도구입니다. 한국기술교육대학교와는 관련이 없습니다.</dd></div>
+      <div><dt>코드 서명이 없습니다</dt><dd>그래서 Windows가 처음 실행할 때 경고를 띄웁니다. 확장 프로그램도 스토어에 등록되지 않은 개발자 설치판입니다.</dd></div>
+      <div><dt>데이터는 내 PC에만 남습니다</dt><dd>확장 프로그램은 LMS의 제목, 강좌, 기한, 과제 설명만 읽어 이 PC의 YHT로 넘깁니다. 외부 서버로 보내지 않습니다.</dd></div>
+      <div><dt>자동 로그인은 선택입니다</dt><dd>계정을 저장하면 크롬 로그인 화면에 대신 입력합니다. 저장하지 않아도 크롬에서 직접 로그인하면 똑같이 동작합니다.</dd></div>
+      <div><dt>글꼴과 효과</dt><dd>Pretendard가 설치되어 있으면 Pretendard로, 없으면 맑은 고딕으로 보입니다. 블러와 둥근 모서리는 Windows 11에서 가장 깔끔합니다.</dd></div>
+      <div><dt>파일 확인</dt><dd>YHT.exe의 SHA-256<br><span class="hash">d30f514402e7e5cfe4ec81ca8d645b4218097a1b16715088d8e0c964e439c49b</span></dd></div>
+    </dl>
+  </section>
+
+  <footer><span>YHT (You Have Time) · made by 박서현</span><span>v10.2 · Windows 10/11</span></footer>
+</div>
+
+<script>
+// Time left until this Sunday 23:59, written the way the widget writes it.
+(function(){
+  var out=document.getElementById('left');
+  function tick(){
+    var now=new Date(),end=new Date(now);end.setDate(now.getDate()+((7-now.getDay())%7));end.setHours(23,59,0,0);
+    var ms=Math.max(0,end-now),days=Math.floor(ms/864e5),hours=Math.floor(ms%864e5/36e5);
+    out.textContent=days+(days===1?' day':' days')+' · '+(ms<36e5?'<1 hour':hours+(hours===1?' hour':' hours'))+' 남음';
+  }
+  tick();setInterval(tick,60000);
+})();
+
+</script>
+
+</body>
+</html>
