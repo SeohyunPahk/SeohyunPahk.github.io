@@ -146,13 +146,14 @@ footer{border-top:1px solid var(--line);padding-top:22px;color:var(--slate);font
   </section>
 
   <section class="feature flip">
-    <div class="shot"><img src="hero-dark.png" alt="다크 글래스 스타일의 YHT 위젯. 지금 볼 수 있는 강의 영상 카드는 청록빛, 아직 열리지 않은 퀴즈 카드는 주황빛이 가장자리에 감돈다."></div>
+    <div class="shot"><img src="menu-courses.png" alt="YHT 메뉴가 열려 있고, LMS 과목별 업데이트 하위 메뉴에 과목마다 켜고 끄는 스위치가 보인다. 웹프로그래밍 과목만 꺼져 있다."></div>
     <div>
-      <h2>지금 할 수 있는 일은 빛으로 구분합니다</h2>
-      <p>카드 가장자리에 은은한 빛이 돕니다. 표를 읽지 않아도 무엇부터 손댈 수 있는지 보입니다.</p>
+      <h2>보고 싶은 과목만, 지금 할 수 있는 일부터</h2>
+      <p>LMS에 있는 모든 걸 다 볼 필요는 없습니다. 과목마다 스위치를 켜고 끌 수 있고, 학기가 바뀌면 새 학기 과목이 알아서 나타납니다.</p>
       <ul>
         <li><span class="go">진행 중</span> 지금 제출하거나 시청할 수 있는 활동</li>
-        <li><span class="wait">시작 전</span> 아직 열리지 않은 활동</li>
+        <li><span class="wait">시작 전</span> 아직 열리지 않은 활동. 숨겨 두면 시작 시간에 맞춰 나타납니다</li>
+        <li>메뉴 › LMS 과목별 업데이트에서 과목마다 켜고 끄기</li>
         <li>마감이 지난 항목은 남은 시간이 붉게 바뀝니다</li>
         <li>끝낸 일은 동그라미를 눌러 지우고, 5초 안에 다시 누르면 되돌립니다</li>
       </ul>
@@ -166,8 +167,23 @@ footer{border-top:1px solid var(--line);padding-top:22px;color:var(--slate);font
       <p>LMS는 들어가야 보이지만 바탕화면은 켜면 보입니다. YHT는 다른 창 위로 올라오지 않고 바탕화면에 머뭅니다. 평소에는 잠겨 있어서 실수로 눌리지 않고, 더블 클릭하거나 자물쇠를 누르면 열립니다.</p>
       <ul>
         <li>Windows를 켜면 함께 시작</li>
+        <li>머리글에 남은 할 일 개수와 마지막 LMS 동기화 시각</li>
         <li>위쪽을 끌어 옮기고 가장자리를 끌어 크기 조절</li>
         <li>우클릭 한 번으로 메뉴와 모든 옵션</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="feature flip">
+    <div class="shot"><img src="patch-notes.png" alt="YHT 패치내역 창. 10.6 버전에서 바뀐 점이 목록으로 정리되어 있다."></div>
+    <div>
+      <h2>한 번 깔면 알아서 최신 버전</h2>
+      <p>새 버전이 나오면 YHT가 스스로 내려받아 바꾸고 다시 켜집니다. 할 일과 설정은 그대로입니다. 무엇이 바뀌었는지는 업데이트 알림이나 메뉴 › 패치내역에서 볼 수 있습니다.</p>
+      <ul>
+        <li>켜질 때와 3시간마다 새 버전 확인</li>
+        <li>개발자 서명이 확인된 파일만 설치</li>
+        <li>메뉴 › 업데이트 확인으로 바로 받기</li>
+        <li>메뉴 › 옵션 › 자동 업데이트로 끄기</li>
       </ul>
     </div>
   </section>
@@ -200,7 +216,7 @@ footer{border-top:1px solid var(--line);padding-top:22px;color:var(--slate);font
     <dl>
       <div><dt>학교 공식 프로그램이 아닙니다</dt><dd>학생 한 명이 만들어 쓰는 비공식 도구입니다. 한국기술교육대학교와는 관련이 없습니다.</dd></div>
       <div><dt>코드 서명이 없습니다</dt><dd>그래서 Windows가 처음 실행할 때 경고를 띄웁니다. 확장 프로그램도 스토어에 등록되지 않은 개발자 설치판입니다.</dd></div>
-      <div><dt>데이터는 내 PC에만 남습니다</dt><dd>확장 프로그램은 LMS의 제목, 강좌, 기한, 과제 설명만 읽어 이 PC의 YHT로 넘깁니다. 외부 서버로 보내지 않습니다.</dd></div>
+      <div><dt>데이터는 내 PC에만 남습니다</dt><dd>확장 프로그램은 LMS의 제목, 강좌, 기한, 과제 설명만 읽어 이 PC의 YHT로 넘깁니다. 외부 서버로 보내지 않습니다. YHT가 인터넷에 접속하는 것은 새 버전 확인뿐입니다.</dd></div>
       <div><dt>자동 로그인은 선택입니다</dt><dd>계정을 저장하면 크롬 로그인 화면에 대신 입력합니다. 저장하지 않아도 크롬에서 직접 로그인하면 똑같이 동작합니다.</dd></div>
       <div><dt>글꼴과 효과</dt><dd>Pretendard가 설치되어 있으면 Pretendard로, 없으면 맑은 고딕으로 보입니다. 블러와 둥근 모서리는 Windows 11에서 가장 깔끔합니다.</dd></div>
       <div><dt>파일 확인</dt><dd>YHT.exe의 SHA-256<br><span class="hash">c615d6932490f038b85045fea705c0a951288741ab86b150a77893656b60a153</span></dd></div>
