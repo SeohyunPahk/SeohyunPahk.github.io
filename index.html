@@ -61,9 +61,12 @@ button.get[disabled]{opacity:.55;cursor:default}
 .stack img:first-child{left:0;top:0}
 .stack img:last-child{right:0;bottom:0}
 
-.feature{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:44px;align-items:center}
+.feature{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:56px;align-items:center}
 .feature.flip .shot{order:2}
-.feature .shot img{display:block;width:100%;max-width:420px;margin-inline:auto;border-radius:18px;box-shadow:0 18px 44px rgba(20,34,60,.22)}
+.feature .shot img{display:block;width:100%;max-width:340px;margin-inline:auto;border-radius:18px;box-shadow:0 18px 44px rgba(20,34,60,.22)}
+/* Dialog screenshots have no backdrop of their own; a soft panel gives them the same weight as the widget shots. */
+.panel{display:flex;justify-content:center;align-items:center;padding:36px 28px;border-radius:24px;background:linear-gradient(150deg,var(--sky-deep),var(--paper))}
+.panel img{box-shadow:0 14px 36px rgba(20,34,60,.22)}
 .feature h2{font-weight:900;font-size:clamp(26px,3.6vw,36px);line-height:1.18}
 .feature p{margin-top:14px;color:var(--slate);max-width:32em}
 .feature ul{margin:16px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
@@ -79,13 +82,14 @@ button.get[disabled]{opacity:.55;cursor:default}
 .row img{display:block;width:100%;border-radius:14px}
 .row figcaption{margin-top:8px;font-size:14px;color:var(--slate)}
 
-.steps ol{margin:26px 0 0;padding:0;list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.steps .body{margin-top:26px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start}
+.steps ol{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:12px}
 .steps li{counter-increment:s;background:var(--paper);border-radius:16px;padding:20px 22px;min-width:0}
 .steps li::before{content:counter(s);font-family:var(--mono);color:var(--accent);font-size:15px}
 .steps h3{font-weight:700;font-size:19px;margin-top:4px}
 .steps li p{margin-top:6px;color:var(--slate);font-size:15px}
-.steps .dialog{margin-top:22px;display:flex;justify-content:center}
-.steps .dialog img{border-radius:10px;box-shadow:0 14px 36px rgba(20,34,60,.2);width:100%;max-width:400px}
+.steps .dialog{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px)}
+.steps .dialog img{border-radius:10px;width:100%;max-width:380px}
 
 .notes dl{margin:22px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 40px}
 .notes dt{font-family:var(--display);font-weight:700;font-size:17px}
@@ -99,7 +103,9 @@ footer{border-top:1px solid var(--line);padding-top:22px;color:var(--slate);font
   .hero,.feature{grid-template-columns:minmax(0,1fr)}
   .feature.flip .shot{order:0}
   .row{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .steps ol,.notes dl{grid-template-columns:minmax(0,1fr)}
+  .steps .body,.notes dl{grid-template-columns:minmax(0,1fr)}
+  .steps .dialog{position:static}
+  .feature .shot img{max-width:300px}
   .bar span{display:none}
 }
 </style>
@@ -126,7 +132,7 @@ footer{border-top:1px solid var(--line);padding-top:22px;color:var(--slate);font
     </div>
     <div class="stack" aria-hidden="true">
       <img src="hero-dark.png" alt="">
-      <img src="light.png" alt="">
+      <img src="theme-rose.png" alt="">
     </div>
   </section>
 
@@ -174,7 +180,7 @@ footer{border-top:1px solid var(--line);padding-top:22px;color:var(--slate);font
   </section>
 
   <section class="feature flip">
-    <div class="shot"><img src="patch-notes.png" alt="YHT 패치내역 창. 10.6 버전에서 바뀐 점이 목록으로 정리되어 있다."></div>
+    <div class="shot panel"><img src="patch-notes.png" alt="YHT 패치내역 창. 10.6 버전에서 바뀐 점이 목록으로 정리되어 있다."></div>
     <div>
       <h2>한 번 깔아 두면 알아서 최신 버전</h2>
       <p>새 버전이 나오면 YHT가 직접 받아서 바꾸고 다시 켜져요. 할 일과 설정은 그대로 남아요. 무엇이 바뀌었는지는 업데이트 알림을 누르거나 메뉴 › 패치내역에서 볼 수 있어요.</p>
@@ -201,13 +207,15 @@ footer{border-top:1px solid var(--line);padding-top:22px;color:var(--slate);font
   <section class="steps">
     <h2>설치는 파일 하나, 연결은 처음 한 번만</h2>
     <p>ZIP 안에는 실행 파일 하나와 안내문만 들어 있어요. LMS 연결에는 Google Chrome이 필요해요.</p>
+    <div class="body">
     <ol>
       <li><h3>YHT.exe 실행</h3><p>압축을 풀고 실행하세요. “Windows의 PC 보호” 창이 뜨면 추가 정보 → 실행을 누르면 돼요.</p></li>
       <li><h3>자동 실행 선택</h3><p>컴퓨터를 켤 때 같이 켤지 물어봐요. 예를 누르면 YHT가 PC 안에 자리를 잡으니, 내려받은 파일은 지워도 괜찮아요.</p></li>
       <li><h3>크롬에 확장 프로그램 넣기</h3><p>설정 창에서 설치 시작을 누르면 크롬 확장 프로그램 페이지와 폴더가 함께 열려요. 개발자 모드를 켜고 폴더를 끌어다 놓으면 돼요.</p></li>
       <li><h3>LMS 열고 가져오기</h3><p>크롬에서 LMS 열고 동기화를 누르고 로그인하세요. 다음부터는 위젯의 LMS 연동 버튼 하나면 충분해요.</p></li>
     </ol>
-    <div class="dialog"><img src="setup.png" alt="YHT의 LMS 연동 설정 창. 1번 크롬에 확장 프로그램 넣기와 2번 LMS 열고 가져오기 단계가 순서대로 보인다."></div>
+    <div class="dialog panel"><img src="setup.png" alt="YHT의 LMS 연동 설정 창. 1번 크롬에 확장 프로그램 넣기와 2번 LMS 열고 가져오기 단계가 순서대로 보인다."></div>
+    </div>
   </section>
 
   <section class="notes">
