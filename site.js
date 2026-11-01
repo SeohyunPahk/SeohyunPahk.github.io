@@ -314,11 +314,18 @@ var alarm=(function(){
   });
 })();
 
+// The whole page grows with the window (the rem in site.css); the widgets, set in pixels like the app, follow it.
+function ui(){return parseFloat(getComputedStyle(document.documentElement).fontSize)/16}
+function scaleUi(){document.documentElement.style.setProperty('--ui',ui().toFixed(3))}
+scaleUi();addEventListener('resize',scaleUi);
+
 // The fixed half keeps the widget at a size the window can hold; its film runs while it can be seen.
 (function(){
-  var stage=$('.stage'),fit=$('.stage__fit'),widget=$('#todo');
+  var stage=$('.stage'),fit=$('.stage__fit'),widget=$('#todo'),cap=$('#todoCap');
   function size(){
-    fit.style.setProperty('--fit',wide.matches?Math.min(1,(innerHeight-120)/widget.offsetHeight).toFixed(3):1);
+    fit.style.setProperty('--fit',1);
+    var room=innerHeight-cap.offsetHeight-40;
+    fit.style.setProperty('--fit',wide.matches?Math.min(ui(),room/widget.offsetHeight,stage.clientWidth*.86/widget.offsetWidth).toFixed(3):1);
   }
   size();addEventListener('resize',size);
   if(!('IntersectionObserver' in window))return;
@@ -333,7 +340,8 @@ var alarm=(function(){
   function fit(){
     panes.forEach(function(p){
       var el=$('.pane__in',p);
-      p.style.setProperty('--fit',pinned.matches?Math.min(1.08,stage.clientWidth/el.offsetWidth,(innerHeight-40)/el.offsetHeight).toFixed(3):1);
+      p.style.setProperty('--fit',1);
+      p.style.setProperty('--fit',pinned.matches?Math.min(1.08*ui(),stage.clientWidth/el.offsetWidth,(innerHeight-40)/el.offsetHeight).toFixed(3):1);
     });
   }
   function show(id){
